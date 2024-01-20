@@ -1,0 +1,34 @@
+name: Run Python Script and Commit DB
+
+on:
+  push:
+  schedule:
+    - cron: '0 10 * * 6'  # UTCで毎週土曜日の10時(日本時間で毎週土曜日の19時)
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11'
+
+    - name: Install Dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Run Script
+      run: python 2024.0125/app_DataCollection.py  # スクリプトのパスを適切に指定
+
+    - name: Commit and Push Database
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add 2024.0125/Tokyo23_RealEatate_DB.db
+        git commit -m "Update database"
+        git push
