@@ -1,0 +1,26 @@
+name: Run Python Script
+
+on:
+  push:
+  schedule:
+    - cron: '0 8 * * 6'  # UTCで毎週日曜日の8時(日本時間で毎週日曜日の17時)
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11'
+
+    - name: Install Dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Run Script
+      run: python 2024.0125/app_DataCollection.py  # スクリプトのパスを適切に指定
